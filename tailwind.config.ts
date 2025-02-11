@@ -9,10 +9,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: 'var(--background)',
+        text: 'var(--foreground)',
+        link: 'var(--link)',
+        muted: 'var(--muted)',
+        contrast: 'var(--bg-contrast)'
       },
     },
   },
+  darkMode: 'media',
   plugins: [],
 } satisfies Config;

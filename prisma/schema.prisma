@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  username      String    @unique
+  name          String
+  password      String
+  poems         Poem[]
+  likes         Like[]
+  savedPoems    SavedPoem[]
+  comments      Comment[]
+  following     Follow[] @relation("Following")
+  followers     Follow[] @relation("Followers")
+  createdAt     DateTime @default(now())
+}
+
+model Poem {
+  id            String    @id @default(uuid())
+  title         String
+  content       String
+  author        User      @relation(fields: [authorId], references: [id])
+  authorId      String
+  likes         Like[]
+  savedBy       SavedPoem[]
+  comments      Comment[]
+  categories    PoemCategory[]
+  tags          PoemTag[]
+  createdAt     DateTime  @default(now())
+}
+
+model Like {
+  id            String   @id @default(uuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  poem          Poem     @relation(fields: [poemId], references: [id])
+  poemId        String
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, poemId]) 
+}
+
+model SavedPoem {
+  id            String   @id @default(uuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  poem          Poem     @relation(fields: [poemId], references: [id])
+  poemId        String
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, poemId])
+}
+
+model Comment {
+  id            String   @id @default(uuid())
+  content       String
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  poem          Poem     @relation(fields: [poemId], references: [id])
+  poemId        String
+  createdAt     DateTime @default(now())
+}
+
+model PoemCategory {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  poems         Poem[]
+}
+
+model PoemTag {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  poems         Poem[]
+}
+
+model Follow {
+  id            String   @id @default(uuid())
+  follower      User     @relation("Following", fields: [followerId], references: [id])
+  followerId    String
+  following     User     @relation("Followers", fields: [followingId], references: [id])
+  followingId   String
+  createdAt     DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}
