@@ -10,8 +10,8 @@ type Poem = {
   };
 };
 
-async function PoemPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+async function PoemPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   const poem: Poem | null = await prisma.poem.findUnique({
     where: { id },
