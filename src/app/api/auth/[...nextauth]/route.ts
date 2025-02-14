@@ -5,13 +5,12 @@ import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
 
-// Definindo a estrutura personalizada para a sessão
 interface SessionUser {
   username: string;
   id: string;
 }
 
-export const authOptions: NextAuthOptions = {
+ const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -37,7 +36,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Senha incorreta.")
         }
 
-        // Retorne apenas o username do usuário
         return {
           username: user.username,
           id: user.id,
@@ -51,7 +49,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      // Salvando o username no token
       if (user) {
         token.username = user.username
         token.id = user.id
@@ -69,3 +66,5 @@ export const authOptions: NextAuthOptions = {
 
 const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }
+
+export { authOptions }
