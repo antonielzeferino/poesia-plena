@@ -3,18 +3,18 @@ import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } 
 ) {
-  try {
-    const { id } = params;
 
+  const { id } = await params;
+
+  try {
     if (!id) {
       return NextResponse.json(
         { message: "ID do poema é obrigatório" },
         { status: 400 }
       );
     }
-
     const poem = await prisma.poem.delete({
       where: { id },
     });
