@@ -27,15 +27,15 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-background">
       <main className="w-full max-w-md text-center">
-        <h1 className="text-2xl font-bold text-text mb-4">Poemas Recentes</h1>
+        <h1 className="text-2xl font-bold text-foreground mb-4">Poemas Recentes</h1>
 
         {poems.length > 0 ? (
           <ul className="space-y-4">
             {poems.map((poem) => (
               <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start">
-                <h2 className="text-lg font-semibold text-text">{poem.title}</h2>
+                <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
                 <p className="text-sm text-muted">Por {poem.author.username}</p>
-                <p className="text-text mt-2 line-clamp-3 text-justify break-words hyphens-auto">
+                <p className="text-foreground mt-2 line-clamp-3 text-justify break-words hyphens-auto whitespace-pre-wrap">
                   {poem.content}
                 </p>
                 <Link

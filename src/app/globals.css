@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Variáveis para o tema claro */
 :root {
   --background: #F5F5F5;
   --bg-contrast: #FFF;
@@ -11,11 +10,10 @@
   --muted: #8a8a8a;
 }
 
-/* Variáveis para o tema escuro */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #121212;
-    --bg-contrast: #454545;
+    --bg-contrast: #3e3e3e;
     --foreground: #f1f1f1;
     --link: #FFEB3B;
     --muted: #a0a0a0;

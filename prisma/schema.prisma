@@ -10,7 +10,7 @@ datasource db {
 model User {
   id            String    @id @default(uuid())
   username      String    @unique
-  name          String
+  name          String?
   password      String
   poems         Poem[]
   likes         Like[]
@@ -19,7 +19,9 @@ model User {
   following     Follow[] @relation("Following")
   followers     Follow[] @relation("Followers")
   createdAt     DateTime @default(now())
+  isActive      Boolean  @default(true)
 }
+
 
 model Poem {
   id            String    @id @default(uuid())

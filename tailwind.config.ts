@@ -10,7 +10,7 @@ export default {
     extend: {
       colors: {
         background: 'var(--background)',
-        text: 'var(--foreground)',
+        foreground: 'var(--foreground)',
         link: 'var(--link)',
         muted: 'var(--muted)',
         contrast: 'var(--bg-contrast)'

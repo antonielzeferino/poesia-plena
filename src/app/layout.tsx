@@ -15,10 +15,12 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body
-        className={`antialiased`}
+        className={`antialiased min-h-screen flex flex-col`}
       >
         <Header />
-        {children}
+        <main className="px-2 flex flex-col flex-grow">
+          {children}
+        </main>
       </body>
     </html>
   );

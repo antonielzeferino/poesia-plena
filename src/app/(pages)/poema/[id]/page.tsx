@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import withAuth from "@/lib/withAuth";
 import { notFound } from "next/navigation";
 
 type Poem = {
@@ -9,12 +10,11 @@ type Poem = {
   };
 };
 
-export default async function PoemPage({ params }: { params: { id: string } }) {
-  const { id } = await params;
+async function PoemPage({ params }: { params: { id: string } }) {
+  const { id } = params;
 
-  // Busca o poema usando o ID
   const poem: Poem | null = await prisma.poem.findUnique({
-    where: { id }, // Certifique-se de que o id seja numérico
+    where: { id },
     select: {
       title: true,
       content: true,
@@ -24,18 +24,19 @@ export default async function PoemPage({ params }: { params: { id: string } }) {
     },
   });
 
-  // Verifica se o poema foi encontrado
   if (!poem) {
-    return notFound(); // Redireciona para a página 404 caso o poema não seja encontrado
+    return notFound();
   }
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <main className="w-full max-w-md p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl text-text mb-4 font-light font-mono text-center">{poem.title}</h1>
+        <h1 className="text-2xl text-foreground mb-4 font-light font-mono text-center">{poem.title}</h1>
         <p className="text-sm text-muted">Por {poem.author.username}</p>
-        <p className="text-text mt-4 text-justify break-words hyphens-auto">{poem.content}</p>
+        <p className="text-foreground mt-4 text-justify break-words hyphens-auto whitespace-pre-wrap">{poem.content}</p>
       </main>
     </div>
   );
 }
+
+export default withAuth(PoemPage)
