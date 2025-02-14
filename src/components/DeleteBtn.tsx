@@ -2,7 +2,7 @@
 
 import { Trash } from "lucide-react";
 
-const DeleteBtn = ({ id }:{id: String}) => {
+const DeleteBtn = ({ id }: {id: string}) => {
   const handleDelete = async () => {
     try {
       await fetch(`/api/poems/${id}`, {

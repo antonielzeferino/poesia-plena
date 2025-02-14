@@ -1,19 +1,21 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { redirect } from "next/navigation"
-import React, { ComponentType } from "react"
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+import React, { ComponentType } from "react";
 
-export default function withAuth<T>(Component: ComponentType<any>) {
+export default function withAuth<T extends Record<string, unknown>>(
+  Component: ComponentType<T>
+) {
   const ProtectedComponent = async (props: T) => {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
 
     if (!session) {
-      redirect("/auth/signin")
-      return null
+      redirect("/auth/signin");
+      return null;
     }
 
-    return <Component {...props} />
-  }
+    return <Component {...props} />;
+  };
 
-  return ProtectedComponent
+  return ProtectedComponent;
 }

@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 
 import Link from "next/link";
 import UserInfo from "@/app/(pages)/configuracoes/UserInfo";
-import { Trash } from "lucide-react";
 import DeleteBtn from "@/components/DeleteBtn";
 
 const prisma = new PrismaClient();
