@@ -1,0 +1,71 @@
+"use client";
+
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
+
+type Poem = {
+  id: string;
+  title: string;
+  content: string;
+  author?: { username: string }; // Se o autor for incluído no backend
+};
+
+const ListPoems: React.FC = () => {
+  const [poems, setPoems] = useState<Poem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPoems = async () => {
+      try {
+        const response = await fetch("/api/poems"); // URL corrigida
+        if (!response.ok) {
+          throw new Error("Erro ao buscar poemas");
+        }
+        const data = await response.json();
+        setPoems(data.poems); // Ajustando acesso aos dados
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Erro desconhecido");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPoems();
+  }, []);
+
+  if (loading) {
+    return <p className="text-muted">Carregando...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
+  }
+
+  return (
+    <>
+      {poems.length > 0 ? (
+        <ul className="space-y-4">
+          {poems.map((poem) => (
+            <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start">
+              <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
+              {poem.author && (
+                <p className="text-sm text-muted">Por {poem.author.username}</p>
+              )}
+              <p className="text-foreground mt-2 line-clamp-3 text-justify break-words hyphens-auto whitespace-pre-wrap">
+                {poem.content}
+              </p>
+              <Link href={`/poema/${poem.id}`} className="text-link hover:underline text-sm">
+                Ler mais
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-muted">Nenhum poema encontrado.</p>
+      )}
+    </>
+  );
+};
+
+export default ListPoems;

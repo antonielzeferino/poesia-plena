@@ -54,7 +54,7 @@ const Configuracoes = async () => {
 
           <div className="flex justify-between mt-4">
             <Link href="/auth/signin">
-              <button className="bg-medium-blue text-white px-4 py-2 rounded-lg hover:bg-dark-blue">
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-800">
                 Entrar
               </button>
             </Link>
