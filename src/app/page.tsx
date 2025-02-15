@@ -3,18 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 async function getPoems() {
   try {
-    return await prisma.poem.findMany({
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        author: {
-          select: { username: true },
-        },
-      },
-      orderBy: { createdAt: "asc" },
-      take: 10,
-    });
+    return await prisma.poem.findMany();
   } catch (error) {
     console.error("Erro ao buscar poemas:", error);
     return [];
@@ -34,7 +23,7 @@ export default async function Home() {
             {poems.map((poem) => (
               <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start">
                 <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
-                <p className="text-sm text-muted">Por {poem.author.username}</p>
+               {/*  <p className="text-sm text-muted">Por {poem.author.username}</p> */}
                 <p className="text-foreground mt-2 line-clamp-3 text-justify break-words hyphens-auto whitespace-pre-wrap">
                   {poem.content}
                 </p>
