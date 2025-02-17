@@ -5,7 +5,6 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> } 
 ) {
-
   const { id } = await params;
 
   try {
@@ -15,8 +14,17 @@ export async function DELETE(
         { status: 400 }
       );
     }
+
     const poem = await prisma.poem.delete({
       where: { id },
+      include: {
+        author: {
+          select: { username: true },
+        },
+        likes: true,
+        comments: true,
+        savedBy: true,
+      },
     });
 
     return NextResponse.json(poem, { status: 200 });

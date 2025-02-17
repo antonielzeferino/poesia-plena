@@ -74,7 +74,7 @@ const Configuracoes = async () => {
 
   return (
     <div className="w-full text-foreground">
-      {user && <UserInfo user={user} />}
+      {user && <UserInfo userId={user.id}/>}
   
       {poems.length > 0 && (
         <div className="mt-6 w-full">
