@@ -3,7 +3,7 @@ const Favorite = () => {
     <>
       <div>
         <h1>
-          Como tu acha que eu vou fazer um favorito sem saber o que é um favorito?
+          Pagina de favoritos não está disponível.
         </h1>
       </div>
     </>
