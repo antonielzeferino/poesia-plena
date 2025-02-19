@@ -7,7 +7,7 @@ type Poem = {
   id: string;
   title: string;
   content: string;
-  author?: { username: string }; // Se o autor for incluído no backend
+  author?: { username: string }; 
 };
 
 const ListPoems: React.FC = () => {
@@ -18,12 +18,12 @@ const ListPoems: React.FC = () => {
   useEffect(() => {
     const fetchPoems = async () => {
       try {
-        const response = await fetch("/api/poems"); // URL corrigida
+        const response = await fetch("/api/poems");
         if (!response.ok) {
           throw new Error("Erro ao buscar poemas");
         }
         const data = await response.json();
-        setPoems(data.poems); // Ajustando acesso aos dados
+        setPoems(data.poems);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erro desconhecido");
       } finally {

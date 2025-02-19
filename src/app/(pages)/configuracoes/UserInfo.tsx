@@ -1,68 +1,59 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Poem, User } from "@prisma/client";
 
-type PoemWithRelations = Poem & {
-  author: User & {
-    following: { id: string }[];
-    followers: { id: string }[];
-  };
+type Poem = {
+  id: string;
+  title: string;
+  content: string;
 };
 
-const UserInfo = ({ userId }: { userId: string }) => {
-  const [poems, setPoems] = useState<PoemWithRelations[]>([]);
+type User = {
+  id: string;
+  username: string;
+  name?: string;
+  poems: Poem[];
+  following: { id: string }[];
+  followers: { id: string }[];
+};
+
+const UserInfo = () => {
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!userId) return;
-
-    const fetchPoems = async () => {
+    const fetchUserData = async () => {
       try {
-        const res = await fetch(`/api/poems/${userId}`, {
-          method: "GET",
-        });
-        if (!res.ok) throw new Error("Erro ao buscar poemas");
+        const res = await fetch(`/api/user/config`);
+        if (!res.ok) throw new Error("Erro ao buscar usuário");
 
-        const data = await res.json();
-        setPoems(data);
-      } catch (error) {
-        console.error(error);
+        const data: User = await res.json();
+        setUser(data);
+      } catch (err) {
+        setError("Erro ao carregar as informações do usuário.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPoems();
-  }, [userId]);
+    fetchUserData();
+  }, []);
 
   if (loading) return <p>Carregando...</p>;
-  if (!poems.length) return <p>Nenhum poema encontrado</p>;
-
-  const author = poems[0]?.author;
+  if (error) return <p>{error}</p>;
+  if (!user) return <p>Usuário não encontrado</p>;
 
   return (
     <div className="flex flex-wrap items-center gap-4">
-      <div className="flex flex-wrap items-center gap-4">
-        <div>
-          <p className="text-foreground">{author.username || "Não disponível"}</p>
-        </div>
-        <div>
-          {author.name && (
-            <p className="text-foreground text-[12px] opacity-50">{author.name}</p>
-          )}
-        </div>
+      <div>
+        <p className="text-foreground">{user.username || "Não disponível"}</p>
+        {user.name && <p className="text-foreground text-[12px] opacity-50">{user.name}</p>}
       </div>
       <div className="flex gap-4">
-        <p className="text-foreground">
-          posts: <span>{poems.length}</span>
-        </p>
-        <p className="text-foreground">
-          seguindo: <span>{author.following.length}</span>
-        </p>
-        <p className="text-foreground">
-          seguidores: <span>{author.followers.length}</span>
-        </p>
+        <p className="text-foreground">posts: <span>{user.poems.length}</span></p>
+        <p className="text-foreground">seguindo: <span>{user.following.length}</span></p>
+        <p className="text-foreground">seguidores: <span>{user.followers.length}</span></p>
       </div>
     </div>
   );
