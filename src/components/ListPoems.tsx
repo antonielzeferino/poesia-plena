@@ -7,7 +7,8 @@ type Poem = {
   id: string;
   title: string;
   content: string;
-  author?: { username: string }; 
+  createdAt: Date;
+  author?: { username: string };
 };
 
 const ListPoems: React.FC = () => {
@@ -50,9 +51,19 @@ const ListPoems: React.FC = () => {
             <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start">
               <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
               {poem.author && (
-                <p className="text-sm text-muted">Por {poem.author.username}</p>
+                <div className="flex justify-between">
+                  <p className="text-sm text-muted">Por {poem.author.username}</p>
+                  <span className="text-md text-muted">
+                    {new Date(poem.createdAt).toLocaleDateString('pt-BR', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })}
+                  </span>
+                </div>
               )}
-              <p className="text-foreground mt-2 line-clamp-3 text-justify break-words hyphens-auto whitespace-pre-wrap">
+              <hr className="border border-stone-500" />
+              <p className="text-foreground mt-2 line-clamp-3 text-justify break-words hyphens-auto">
                 {poem.content}
               </p>
               <Link href={`/poema/${poem.id}`} className="text-link hover:underline text-sm">
@@ -68,4 +79,4 @@ const ListPoems: React.FC = () => {
   );
 };
 
-export default ListPoems;
+export default ListPoems

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import UserInfo from "@/app/(pages)/configuracoes/UserInfo";
+import DeleteBtn from "@/components/DeleteBtn";
 
 type Poem = { id: string; title: string };
 type User = { id: string; username: string; poems: Poem[] };
@@ -55,7 +56,7 @@ const Configuracoes = () => {
   }
 
   return (
-    <div className="w-full text-foreground">
+    <div className="w-full text-foreground mt-2">
       <UserInfo />
 
       {user && user?.poems.length > 0 && (
@@ -68,7 +69,7 @@ const Configuracoes = () => {
                 className="bg-contrast rounded-md text-start shadow-md p-2 flex items-center justify-between transition hover:scale-105 hover:shadow-lg"
               >
                 <Link href={`/poema/${poem.id}`}>
-                  <h3 className="text-sm font-semibold text-foreground truncate w-3/4">
+                  <h3 className="text-sm font-semibold text-foreground line-clamp-1">
                     {poem.title}
                   </h3>
                 </Link>
