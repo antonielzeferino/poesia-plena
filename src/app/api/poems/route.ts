@@ -21,3 +21,25 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Erro ao buscar poemas" }, { status: 500 });
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const { title, content, authorId } = await request.json();
+
+    console.log(title)
+    const poem = await prisma.poem.create({
+      data: {
+        title,
+        content,
+        authorId,
+      },
+    });
+
+    return NextResponse.json(poem, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Erro ao criar o poema", error},
+      { status: 500 }
+    );
+  }
+}

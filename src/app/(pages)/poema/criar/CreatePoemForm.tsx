@@ -35,7 +35,7 @@ const CreatePoemForm = ({ user }: CreatePoemFormProps) => {
     };
 
     try {
-      const response = await fetch('/api/poems/create', {
+      const response = await fetch('/api/poems', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
