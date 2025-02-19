@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import CreatePoemForm from './CreatePoemForm';
 import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import withAuth from '@/lib/withAuth';
 
 const CreatePoemPage = async () => {
   const session = await getServerSession(authOptions);
@@ -14,22 +14,14 @@ const CreatePoemPage = async () => {
     );
   }
 
-  const user = await prisma.user.findUnique({
-    where: { username: session.user.username },
-  });
-
-  if(!user) {
-    return (
-      <div>Ocorreu um errousuário não encontrado</div>
-    )
-  }
+  const userId = session.user.id;
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Criar Poema</h1>
-      <CreatePoemForm user={user} />
+      <CreatePoemForm id={userId} />
     </div>
   );
 };
 
-export default CreatePoemPage;
+export default withAuth(CreatePoemPage);

@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { User } from '@prisma/client';
 
-interface CreatePoemFormProps {
-  user: User;
-}
+type CreatePoemFormProps = {
+  id: string;
+};
 
-const CreatePoemForm = ({ user }: CreatePoemFormProps) => {
+const CreatePoemForm = ({ id }: CreatePoemFormProps) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [authorId, setAuthorId] = useState<string>('');
@@ -17,10 +16,10 @@ const CreatePoemForm = ({ user }: CreatePoemFormProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
-      setAuthorId(user.id);
+    if (id) {
+      setAuthorId(id);
     }
-  }, [user]);
+  }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
