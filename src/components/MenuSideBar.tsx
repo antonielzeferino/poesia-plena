@@ -14,7 +14,7 @@ const MenuSidebar = () => {
   const toggleItem = (label: string) => {
     setActiveItems(prev => ({
       ...prev,
-      [label]: !prev[label] // Alterna o estado individual do item
+      [label]: !prev[label]
     }));
   };
 

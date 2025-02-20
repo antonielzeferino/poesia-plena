@@ -3,7 +3,7 @@ import CreatePoemForm from './CreatePoemForm';
 import { authOptions } from '@/lib/auth';
 import withAuth from '@/lib/withAuth';
 
-const CreatePoemPage = async () => {
+const PoemPage = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -24,4 +24,4 @@ const CreatePoemPage = async () => {
   );
 };
 
-export default withAuth(CreatePoemPage);
+export default withAuth(PoemPage);
