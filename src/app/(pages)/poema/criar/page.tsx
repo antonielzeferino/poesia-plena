@@ -1,15 +1,14 @@
 import { getServerSession } from 'next-auth';
 import CreatePoemForm from './CreatePoemForm';
 import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 async function CreatePoem() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
     return (
-      <div className="container mx-auto p-4">
-        <p>Você precisa estar logado para criar um poema.</p>
-      </div>
+      redirect("/auth/signup")
     );
   }
 
