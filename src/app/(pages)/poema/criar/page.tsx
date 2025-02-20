@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth';
 import CreatePoemForm from './CreatePoemForm';
 import { authOptions } from '@/lib/auth';
-import withAuth from '@/lib/withAuth';
 
 async function CreatePoem() {
   const session = await getServerSession(authOptions);
@@ -24,4 +23,4 @@ async function CreatePoem() {
   );
 };
 
-export default withAuth(CreatePoem);
+export default CreatePoem;
