@@ -48,7 +48,7 @@ const ListPoems: React.FC = () => {
       {poems.length > 0 ? (
         <ul className="space-y-4">
           {poems.map((poem) => (
-            <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start">
+            <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start border-gray-500 dark:border-white/70">
               <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
               {poem.author && (
                 <div className="flex justify-between">
