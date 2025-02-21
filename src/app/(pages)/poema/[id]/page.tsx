@@ -1,6 +1,4 @@
 import MenuSidebar from "@/components/MenuSideBar";
-import { prisma } from "@/lib/prisma";
-import withAuth from "@/lib/withAuth";
 import { notFound } from "next/navigation";
 
 type Poem = {
@@ -11,19 +9,28 @@ type Poem = {
   };
 };
 
+async function getPoem(id: string): Promise<Poem | null> {
+  try {
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/poems/${id}`, {
+      cache: "no-store",
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) return null;
+
+    return res.json();
+  } catch (error) {
+    console.error("Erro ao buscar poema:", error);
+    return null;
+  }
+}
+
 async function PoemPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-
-  const poem: Poem | null = await prisma.poem.findUnique({
-    where: { id },
-    select: {
-      title: true,
-      content: true,
-      author: {
-        select: { username: true },
-      },
-    },
-  });
+  const poem = await getPoem(id);
 
   if (!poem) {
     return notFound();
@@ -31,7 +38,7 @@ async function PoemPage({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <MenuSidebar />
+      <MenuSidebar poemId={id} />
       <main className="w-full md:px-6 pb-4">
         <h1 className="text-2xl text-foreground mb-4 font-light font-mono text-center">{poem.title}</h1>
         <p className="text-sm text-muted">Por {poem.author.username}</p>
@@ -41,4 +48,4 @@ async function PoemPage({ params }: { params: Promise<{ id: string }> }) {
   );
 }
 
-export default withAuth(PoemPage)
+export default PoemPage;
