@@ -18,8 +18,8 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
       try {
         const response = await fetch(`/api/likes?poemId=${poemId}`);
         const data = await response.json();
-        
-        setLikeCount(data.likeCount || 0);
+  
+        setLikeCount(data.totalLikes || 0); 
         setActiveItems((prev) => ({
           ...prev,
           Curtir: data.liked || false,
@@ -28,21 +28,22 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
         console.error("Erro ao buscar status do like:", error);
       }
     };
-
+  
     fetchStats();
   }, [poemId]);
+  
 
   const toggleItem = async (label: string) => {
-    setActiveItems((prev) => ({
-      ...prev,
-      [label]: !prev[label],
-    }));
-
     if (label === "Curtir") {
       try {
         const newLikedState = !activeItems["Curtir"];
-        await saveLikeToDatabase(poemId, newLikedState);
+        setActiveItems((prev) => ({
+          ...prev,
+          Curtir: newLikedState,
+        }));
         setLikeCount((prev) => (newLikedState ? prev + 1 : prev - 1));
+  
+        await saveLikeToDatabase(poemId, newLikedState);
       } catch (error) {
         console.error("Erro ao salvar o like no banco de dados:", error);
       }

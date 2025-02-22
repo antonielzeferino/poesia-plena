@@ -9,11 +9,18 @@ export async function GET(request: NextRequest) {
      const poemId = searchParams.get("poemId");
      const session = await getServerSession(authOptions);
      const userId = session?.user?.id;
- 
+
      if (!poemId) {
        return NextResponse.json({ error: "O ID do poema é obrigatório" }, { status: 400 });
      }
- 
+
+     const totalLikes = await prisma.like.count({
+       where: {
+         poemId,
+       },
+     });
+
+     let liked = false;
      if (userId) {
        const like = await prisma.like.findUnique({
          where: {
@@ -23,23 +30,16 @@ export async function GET(request: NextRequest) {
            },
          },
        });
- 
-       return NextResponse.json({ liked: !!like }, { status: 200 });
-     } else {
-       const totalLikes = await prisma.like.count({
-         where: {
-           poemId,
-         },
-       });
- 
-       return NextResponse.json({ totalLikes }, { status: 200 });
+       liked = !!like;
      }
+
+     return NextResponse.json({ liked, totalLikes }, { status: 200 });
+
    } catch (error) {
      console.error("Erro ao buscar likes:", error);
      return NextResponse.json({ error: "Erro ao buscar likes" }, { status: 500 });
    }
- } 
-
+}
 
 export async function POST(request: NextRequest) {
   try {
