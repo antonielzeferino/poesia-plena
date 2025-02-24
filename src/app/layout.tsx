@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,6 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
+      <Head>
+        <meta name="google-site-verification" content="teWyDbkkLKbIO8Rk7k0Q2H-nSE_0_MGJpzSmw8Kmjck" />
+      </Head>
       <body
         className={`antialiased min-h-screen flex flex-col`}
       >
