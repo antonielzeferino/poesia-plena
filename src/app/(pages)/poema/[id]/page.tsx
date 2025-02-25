@@ -37,7 +37,7 @@ async function PoemPage({ params }: { params: Promise<{ id: string }> }) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center max-w-4xl mx-auto">
       <MenuSidebar poemId={id} />
       <main className="w-full md:px-6 pb-4">
         <h1 className="text-2xl text-foreground mb-4 font-light font-mono text-center">{poem.title}</h1>

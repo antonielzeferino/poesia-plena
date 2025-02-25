@@ -15,7 +15,7 @@ async function CreatePoem() {
   const userId = session.user.id;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-4 w-full  max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Criar Poema</h1>
       <CreatePoemForm id={userId} />
     </div>

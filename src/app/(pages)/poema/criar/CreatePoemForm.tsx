@@ -57,7 +57,7 @@ const CreatePoemForm = ({ id }: CreatePoemFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 w-full">
       <div>
         <label htmlFor="title" className="block text-foreground">Título:</label>
         <input

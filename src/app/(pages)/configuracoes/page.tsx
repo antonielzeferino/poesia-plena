@@ -56,7 +56,7 @@ const Configuracoes = () => {
   }
 
   return (
-    <div className="w-full text-foreground mt-2">
+    <div className="w-full text-foreground mt-2 max-w-4xl mx-auto">
       <UserInfo />
 
       {user && user?.poems.length > 0 && (
