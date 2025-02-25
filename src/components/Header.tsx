@@ -14,7 +14,7 @@ const Header = () => {
   };
 
   return (
-    <header className="text-gray-400 p-2 flex items-center justify-between rounded-b-3xl relative">
+    <header className="text-gray-400 p-2 flex items-center justify-between rounded-b-3xl sticky top-0">
       <button
         onClick={() => setMenuOpen(!menuOpen)}
         className="focus:outline-none relative bg-gray-700 p-2 rounded-md hover:text-white transition-all duration-500"
