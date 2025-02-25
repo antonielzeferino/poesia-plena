@@ -4,11 +4,8 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-background">
-      <main className="w-ful text-center">
-        <h1 className="text-2xl font-bold text-foreground mb-4">Poemas Recentes</h1>
-
-      <ListPoems />
-
+      <main className="w-full text-center max-w-4xl mx-auto">
+        <ListPoems />
       </main>
     </div>
   );
