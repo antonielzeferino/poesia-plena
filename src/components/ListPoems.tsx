@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
@@ -36,7 +37,12 @@ const ListPoems: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <p className="text-muted">Carregando...</p>;
+    return (
+      <div className="flex justify-center items-center">
+        <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
+        <span className="ml-2 text-gray-500">Carregando...</span>
+      </div>
+    );
   }
 
   if (error) {
