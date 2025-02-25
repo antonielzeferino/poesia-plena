@@ -19,28 +19,32 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
         const response = await fetch(`/api/likes?poemId=${poemId}`);
         const data = await response.json();
   
-        setLikeCount(data.totalLikes || 0); 
+        setLikeCount(data.totalLikes || 0);
         setActiveItems((prev) => ({
           ...prev,
           Curtir: data.liked || false,
         }));
+
+        const savedResponse = await fetch(`/api/poems/savedPoems?poemId=${poemId}`);
+        const savedData = await savedResponse.json();
+        
+        setActiveItems((prev) => ({
+          ...prev,
+          Salvar: savedData.saved || false,
+        }));
       } catch (error) {
-        console.error("Erro ao buscar status do like:", error);
+        console.error("Erro ao buscar status:", error);
       }
     };
   
     fetchStats();
-  }, [poemId]);
-  
+  }, [poemId]);  
 
   const toggleItem = async (label: string) => {
     if (label === "Curtir") {
       try {
         const newLikedState = !activeItems["Curtir"];
-        setActiveItems((prev) => ({
-          ...prev,
-          Curtir: newLikedState,
-        }));
+        setActiveItems((prev) => ({ ...prev, Curtir: newLikedState }));
         setLikeCount((prev) => (newLikedState ? prev + 1 : prev - 1));
   
         await saveLikeToDatabase(poemId, newLikedState);
@@ -48,7 +52,32 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
         console.error("Erro ao salvar o like no banco de dados:", error);
       }
     }
+  
+    if (label === "Salvar") {
+      try {
+        const newSavedState = !activeItems["Salvar"];
+        setActiveItems((prev) => ({ ...prev, Salvar: newSavedState }));
+  
+        await savePoemToDatabase(poemId, newSavedState);
+      } catch (error) {
+        console.error("Erro ao salvar o poema no banco de dados:", error);
+      }
+    }
   };
+  
+  const savePoemToDatabase = async (poemId: string, saved: boolean) => {
+    const response = await fetch("/api/poems/savedPoems", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ poemId, saved }),
+    });
+  
+    if (!response.ok) {
+      throw new Error("Erro ao salvar o poema no banco de dados");
+    }
+  };  
 
   const saveLikeToDatabase = async (poemId: string, liked: boolean) => {
     const response = await fetch("/api/likes", {
