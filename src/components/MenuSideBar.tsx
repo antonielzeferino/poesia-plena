@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, JSX } from "react";
+import { useRouter } from "next/navigation";
 import { ThumbsUp, Bookmark, Send, MessageCircle, ChevronRight } from "lucide-react";
 
 const MenuSidebar = ({ poemId }: { poemId: string }) => {
@@ -12,8 +13,28 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
     Enviar: false,
     Comentar: false,
   });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/api/user");
+        const data = await response.json();
+  
+        if (response.ok && data) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Erro ao verificar autenticação:", error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+
     const fetchStats = async () => {
       try {
         const response = await fetch(`/api/likes?poemId=${poemId}`);
@@ -24,7 +45,7 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
           ...prev,
           Curtir: data.liked || false,
         }));
-
+  
         const savedResponse = await fetch(`/api/poems/savedPoems?poemId=${poemId}`);
         const savedData = await savedResponse.json();
         
@@ -36,61 +57,61 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
         console.error("Erro ao buscar status:", error);
       }
     };
-  
+    
     fetchStats();
   }, [poemId]);  
 
+  const handleAuthAction = (action: () => void) => {
+    if (!isAuthenticated) {
+      router.push("/auth/signin");
+      return;
+    }
+    action();
+  };
+
   const toggleItem = async (label: string) => {
-    if (label === "Curtir") {
-      try {
-        const newLikedState = !activeItems["Curtir"];
-        setActiveItems((prev) => ({ ...prev, Curtir: newLikedState }));
-        setLikeCount((prev) => (newLikedState ? prev + 1 : prev - 1));
-  
-        await saveLikeToDatabase(poemId, newLikedState);
-      } catch (error) {
-        console.error("Erro ao salvar o like no banco de dados:", error);
+    handleAuthAction(async () => {
+      if (label === "Curtir") {
+        try {
+          const newLikedState = !activeItems["Curtir"];
+          setActiveItems((prev) => ({ ...prev, Curtir: newLikedState }));
+          setLikeCount((prev) => (newLikedState ? prev + 1 : prev - 1));
+    
+          await saveLikeToDatabase(poemId, newLikedState);
+        } catch (error) {
+          console.error("Erro ao salvar o like no banco de dados:", error);
+        }
       }
-    }
-  
-    if (label === "Salvar") {
-      try {
-        const newSavedState = !activeItems["Salvar"];
-        setActiveItems((prev) => ({ ...prev, Salvar: newSavedState }));
-  
-        await savePoemToDatabase(poemId, newSavedState);
-      } catch (error) {
-        console.error("Erro ao salvar o poema no banco de dados:", error);
+    
+      if (label === "Salvar") {
+        try {
+          const newSavedState = !activeItems["Salvar"];
+          setActiveItems((prev) => ({ ...prev, Salvar: newSavedState }));
+    
+          await savePoemToDatabase(poemId, newSavedState);
+        } catch (error) {
+          console.error("Erro ao salvar o poema no banco de dados:", error);
+        }
       }
-    }
+    });
   };
   
   const savePoemToDatabase = async (poemId: string, saved: boolean) => {
     const response = await fetch("/api/poems/savedPoems", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ poemId, saved }),
     });
-  
-    if (!response.ok) {
-      throw new Error("Erro ao salvar o poema no banco de dados");
-    }
+    if (!response.ok) throw new Error("Erro ao salvar o poema no banco de dados");
   };  
 
   const saveLikeToDatabase = async (poemId: string, liked: boolean) => {
     const response = await fetch("/api/likes", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ poemId, liked }),
     });
-
-    if (!response.ok) {
-      throw new Error("Erro ao salvar o like no banco de dados");
-    }
+    if (!response.ok) throw new Error("Erro ao salvar o like no banco de dados");
   };
 
   return (
@@ -107,36 +128,22 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
           <SidebarItem icon={<ThumbsUp />} label="Curtir" count={likeCount} active={activeItems["Curtir"]} toggleItem={toggleItem} color="bg-blue-400" />
           <SidebarItem icon={<Bookmark />} label="Salvar" active={activeItems["Salvar"]} toggleItem={toggleItem} color="bg-purple-400" />
           <br />
-          <SidebarItem icon={<Send />} label="Enviar" active={activeItems["Enviar"]} toggleItem={toggleItem} color="bg-green-400" />
-          <SidebarItem icon={<MessageCircle />} label="Comentar" active={activeItems["Comentar"]} toggleItem={toggleItem} color="bg-teal-400" />
+          <SidebarItem icon={<Send />} label="Enviar" active={activeItems["Enviar"]} toggleItem={() => handleAuthAction(() => {})} color="bg-green-400" />
+          <SidebarItem icon={<MessageCircle />} label="Comentar" active={activeItems["Comentar"]} toggleItem={() => handleAuthAction(() => {})} color="bg-teal-400" />
         </div>
       )}
     </div>
   );
 };
 
-const SidebarItem = ({
-  icon,
-  label,
-  active,
-  toggleItem,
-  color,
-  count,
-}: {
-  icon: JSX.Element;
-  label: string;
-  active: boolean;
-  toggleItem: (label: string) => void;
-  color: string;
-  count?: number;
-}) => {
+const SidebarItem = ({ icon, label, active, toggleItem, color, count }: { icon: JSX.Element; label: string; active: boolean; toggleItem: (label: string) => void; color: string; count?: number; }) => {
   return (
     <button
       onClick={() => toggleItem(label)}
       className={`flex items-center p-2 rounded-full transition ${active ? `${color} text-white` : "hover:bg-gray-300 dark:hover:bg-gray-700"}`}
     >
       {icon}
-      {count !== undefined && count > 0 &&<span className="ml-2 text-sm font-semibold">{count}</span>}
+      {count !== undefined && count > 0 && <span className="ml-2 text-sm font-semibold">{count}</span>}
     </button>
   );
 };
