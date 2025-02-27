@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import UserInfo from "@/app/(pages)/configuracoes/UserInfo";
 import DeleteBtn from "@/components/DeleteBtn";
+import Loading from "@/app/Loading";
 
 type Poem = { id: string; title: string };
 type User = { id: string; username: string; poems: Poem[] };
@@ -31,7 +32,7 @@ const Configuracoes = () => {
     fetchUserData();
   }, []);
 
-  if (loading) return <p>Carregando...</p>;
+  if (loading) return <Loading />
   if (error) {
     return (
       <div className="px-4 w-full flex flex-col flex-grow items-center">

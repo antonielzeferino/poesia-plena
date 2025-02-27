@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/Loading";
 import { LinkIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -31,10 +32,7 @@ const Favorite = () => {
     <div className="p-8 max-w-4xl mx-auto">
 
       {loading ? (
-        <div className="flex justify-center items-center">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
-          <span className="ml-2 text-gray-500">Carregando...</span>
-        </div>
+        <Loading />
       ) : poems.length === 0 ? (
         <p className="text-gray-500">Você ainda não salvou nenhum poema.</p>
       ) : (

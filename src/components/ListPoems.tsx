@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/Loading";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -16,16 +17,21 @@ const ListPoems: React.FC = () => {
   const [poems, setPoems] = useState<Poem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState("recent");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchPoems = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("/api/poems");
+        const response = await fetch(`/api/poems/search?sort=${sortOrder}&page=${currentPage}`);
         if (!response.ok) {
           throw new Error("Erro ao buscar poemas");
         }
         const data = await response.json();
         setPoems(data.poems);
+        setTotalPages(data.totalPages);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erro desconhecido");
       } finally {
@@ -34,15 +40,10 @@ const ListPoems: React.FC = () => {
     };
 
     fetchPoems();
-  }, []);
+  }, [sortOrder, currentPage]);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center">
-        <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
-        <span className="ml-2 text-gray-500">Carregando...</span>
-      </div>
-    );
+    return <Loading />
   }
 
   if (error) {
@@ -51,6 +52,23 @@ const ListPoems: React.FC = () => {
 
   return (
     <>
+      <div className="mb-4">
+        <select
+          id="sortOrder"
+          value={sortOrder}
+          onChange={(e) => {
+            setSortOrder(e.target.value);
+            setCurrentPage(1); // Resetar para a primeira página ao mudar a ordenação
+          }}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-contrast text-foreground"
+        >
+          <option value="recent">Mais recentes</option>
+          <option value="oldest">Mais antigos</option>
+          <option value="popular">Mais populares</option>
+        </select>
+      </div>
+
+      {/* Lista de poemas */}
       {poems.length > 0 ? (
         <ul className="space-y-4">
           {poems.map((poem) => (
@@ -81,8 +99,31 @@ const ListPoems: React.FC = () => {
       ) : (
         <p className="text-muted">Nenhum poema encontrado.</p>
       )}
+
+      {/* Paginação */}
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-700 text-foreground rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm text-muted">
+          Página {currentPage} de {totalPages}
+        </span>
+
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-gray-700 text-foreground rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Próxima
+        </button>
+      </div>
     </>
   );
 };
 
-export default ListPoems
+export default ListPoems;
