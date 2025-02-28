@@ -1,53 +1,48 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const searchQuery = searchParams.get("search") || "";
-  const sortOrder = searchParams.get("sort") || "recent";
+  const searchQuery = searchParams.get("q")?.trim() || "";
   const page = parseInt(searchParams.get("page") || "1", 10);
   const pageSize = 10;
 
+  const searchFilter: Prisma.PoemWhereInput | undefined = searchQuery
+    ? {
+        OR: [
+          { title: { contains: searchQuery, mode: Prisma.QueryMode.insensitive } },
+          { author: { is: { username: { contains: searchQuery, mode: Prisma.QueryMode.insensitive } } } },
+          { content: { contains: searchQuery, mode: Prisma.QueryMode.insensitive } },
+        ],
+      }
+    : undefined;
+
   try {
-    const poems = await prisma.poem.findMany({
-      where: {
-        OR: [
-          { title: { contains: searchQuery, mode: "insensitive" } },
-          { content: { contains: searchQuery, mode: "insensitive" } },
-          { categories: { some: { name: { contains: searchQuery, mode: "insensitive" } } } },
-          { tags: { some: { name: { contains: searchQuery, mode: "insensitive" } } } },
+    const [poems, totalPoems] = await prisma.$transaction([
+      prisma.poem.findMany({
+        where: searchFilter,
+        include: {
+          author: { select: { username: true } },
+        },
+        orderBy: [
+          { title: "asc" },
+          { author: { username: "asc" } },
+          { content: "asc" },
+          { createdAt: "desc" }
         ],
-      },
-      orderBy:
-        sortOrder === "popular"
-          ? { likes: { _count: "desc" } } 
-          : sortOrder === "oldest"
-          ? { createdAt: "asc" } 
-          : { createdAt: "desc" },
-          
-      include: {
-        author: { select: { username: true } },
-        _count: { select: { likes: true } }, 
-      },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    });
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      prisma.poem.count({ where: searchFilter }),
+    ]);
 
-    const totalPoems = await prisma.poem.count({
-      where: {
-        OR: [
-          { title: { contains: searchQuery, mode: "insensitive" } },
-          { content: { contains: searchQuery, mode: "insensitive" } },
-          { categories: { some: { name: { contains: searchQuery, mode: "insensitive" } } } },
-          { tags: { some: { name: { contains: searchQuery, mode: "insensitive" } } } },
-        ],
-      },
-    });
-
-    const totalPages = Math.ceil(totalPoems / pageSize);
-
-    return NextResponse.json({ poems, totalPages, currentPage: page }, { status: 200 });
+    return NextResponse.json(
+      { poems, totalPages: Math.ceil(totalPoems / pageSize), currentPage: page },
+      { status: 200 }
+    );
   } catch (error) {
+    console.error("Erro ao buscar poemas:", error);
     return NextResponse.json({ error: "Erro ao buscar poemas" }, { status: 500 });
   }
 }
