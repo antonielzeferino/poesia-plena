@@ -25,7 +25,7 @@ const ListPoems: React.FC = () => {
     const fetchPoems = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/poems/search?sort=${sortOrder}&page=${currentPage}`);
+        const response = await fetch(`/api/poems?sort=${sortOrder}&page=${currentPage}`);
         if (!response.ok) {
           throw new Error("Erro ao buscar poemas");
         }
@@ -58,7 +58,7 @@ const ListPoems: React.FC = () => {
           value={sortOrder}
           onChange={(e) => {
             setSortOrder(e.target.value);
-            setCurrentPage(1); // Resetar para a primeira página ao mudar a ordenação
+            setCurrentPage(1);
           }}
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-contrast text-foreground"
         >
@@ -68,7 +68,6 @@ const ListPoems: React.FC = () => {
         </select>
       </div>
 
-      {/* Lista de poemas */}
       {poems.length > 0 ? (
         <ul className="space-y-4">
           {poems.map((poem) => (
@@ -117,7 +116,7 @@ const ListPoems: React.FC = () => {
         <button
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-700 text-foreground rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-gray-600 text-gray-200 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Próxima
         </button>
