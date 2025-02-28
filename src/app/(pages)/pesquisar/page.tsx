@@ -3,7 +3,7 @@
 import Loading from "@/app/Loading";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 type Poem = {
   id: string;
@@ -18,11 +18,11 @@ const SearchPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [inputValue, setInputValue] = useState(""); 
+  const [inputValue, setInputValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchPoems = async () => {
+  const fetchPoems = useCallback(async () => {
     if (!query) {
       setPoems([]);
       setLoading(false);
@@ -43,15 +43,15 @@ const SearchPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [query, currentPage]);
 
   useEffect(() => {
     fetchPoems();
-  }, [query, currentPage]);
+  }, [fetchPoems]);
 
   const handleSearchClick = () => {
     setQuery(inputValue);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   return (
@@ -61,12 +61,12 @@ const SearchPage: React.FC = () => {
           type="text"
           placeholder="Digite um título ou trecho..."
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)} 
+          onChange={(e) => setInputValue(e.target.value)}
           className="w-full p-2 border border-gray-300/50 rounded-md bg-contrast text-foreground"
         />
         <button
-          onClick={handleSearchClick} 
-          className="py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+          onClick={handleSearchClick}
+          className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600"
         >
           <Search />
         </button>
@@ -74,7 +74,7 @@ const SearchPage: React.FC = () => {
 
       {loading && <Loading />}
       {error && <p className="text-red-500">{error}</p>}
-      
+
       {poems.length > 0 ? (
         <ul className="space-y-4 mt-4">
           {poems.map((poem) => (
@@ -92,12 +92,12 @@ const SearchPage: React.FC = () => {
             </li>
           ))}
         </ul>
-      ) : query && !loading ? (
+      ) : query ? (
         <p className="text-muted mt-4">Nenhum poema encontrado.</p>
       ) : null}
 
       {poems.length > 0 && (
-        <div className="flex justify-between items-center mt-6">
+        <div className="flex justify-center gap-4 items-center mt-6">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
