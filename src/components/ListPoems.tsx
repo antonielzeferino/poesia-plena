@@ -1,7 +1,5 @@
 "use client";
 
-import Loading from "@/app/Loading";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
@@ -43,7 +41,25 @@ const ListPoems: React.FC = () => {
   }, [sortOrder, currentPage]);
 
   if (loading) {
-    return <Loading />
+    return (
+      <div className="space-y-4">
+        <div className="h-8 bg-gray-500 rounded w-full mb-2 animate-pulse"></div>
+        {[...Array(3)].map((_, index) => (
+          <div
+            key={index}
+            className="border-b p-4 bg-contrast rounded-md border-gray-500 dark:border-white/70 animate-pulse"
+          >
+            <div className="h-6 bg-gray-400 rounded w-3/4 mb-2"></div>
+            <div className="flex justify-between items-center">
+              <div className="h-4 bg-gray-400 rounded w-1/3"></div>
+              <div className="h-4 bg-gray-400 rounded w-20 sm:w-40"></div>
+            </div>
+            <hr className="border border-stone-500 my-2" />
+            <div className="h-16 bg-gray-400 rounded w-full"></div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (error) {
@@ -99,7 +115,6 @@ const ListPoems: React.FC = () => {
         <p className="text-muted">Nenhum poema encontrado.</p>
       )}
 
-      {/* Paginação */}
       <div className="flex justify-between items-center mt-6">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

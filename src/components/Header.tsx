@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, Menu, X, UserCog, House, BookmarkCheck, Pen } from "lucide-react";
 import { usePathname } from "next/navigation";
+import BackBtn from "./BackBtn";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -14,17 +15,22 @@ const Header = () => {
   };
 
   return (
-    <header className="text-gray-400 p-2 flex items-center justify-between rounded-b-3xl sticky top-0">
+    <header className="text-gray-400 p-2 flex justify-between items-center rounded-b-3xl sticky top-0">
+      <div className={`${pathname.includes("/poema/") ? "block" : "hidden"}`}>
+        <BackBtn />
+      </div>
+
+
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="focus:outline-none relative bg-gray-700 p-2 rounded-md hover:text-white transition-all duration-500"
+        className="ml-auto focus:outline-none bg-gray-700 p-2 rounded-md hover:text-white transition-all duration-500"
       >
         {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
 
       {menuOpen && (
-        <div className="absolute top-2 left-16 transform bg-gray-700 p-3 rounded-lg shadow-lg flex gap-6 transition-all duration-300">
-          <div className="absolute top-2 left-0 transform -translate-x-1/2 w-4 h-4 bg-gray-700 rotate-45"></div>
+        <div className="absolute top-2 right-14 bg-gray-700 p-3 rounded-lg shadow-lg flex gap-6 transition-all duration-300">
+          <div className="absolute top-2 right-0 transform translate-x-1/2 w-4 h-4 bg-gray-700 rotate-45"></div>
 
           <Link href="/" className={`hover:text-white ${isActive('/')}`}>
             <House className="w-6 h-6" />
@@ -41,7 +47,6 @@ const Header = () => {
           <Link href="/poema/criar" className={`hover:text-white ${isActive('/poema/criar')}`}>
             <Pen className="w-6 h-6" />
           </Link>
-
         </div>
       )}
     </header>
