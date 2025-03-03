@@ -9,7 +9,7 @@ const CommentModal = ({ poemId, isOpen, onClose }: { poemId: string; isOpen: boo
 
   useEffect(() => {
     if (isOpen) {
-      setComments([{ id: "1", content: "Comentário de teste", user: "user tal" }]);
+      setComments([{ id: "1", content: "Comentário de exemplo", user: "user example" }]);
     }
   }, [isOpen, poemId]);
 
@@ -37,8 +37,8 @@ const CommentModal = ({ poemId, isOpen, onClose }: { poemId: string; isOpen: boo
 
   return (
     <div className="absolute top-0 bg-background left-0 flex items-center justify-center w-screen min-h-screen p-0">
-      <div className="bg-white dark:bg-gray-500 p-6 rounded-lg shadow-lg max-w-md w-full">
-        <button onClick={onClose} className="relative top-0 right-2 p-2 bg-gray-700 rounded-lg">
+      <div className="bg-background p-6 shadow-lg w-full min-h-screen max-w-7xl">
+        <button onClick={onClose} className="relative top-0 left-full -translate-x-8 p-2 bg-gray-700 rounded-md">
           <X size={20} />
         </button>
         <h2 className="text-lg font-semibold mb-4">Comentários</h2>
@@ -46,7 +46,7 @@ const CommentModal = ({ poemId, isOpen, onClose }: { poemId: string; isOpen: boo
         <div className="space-y-3 max-h-40 overflow-y-auto">
           {comments.length > 0 ? (
             comments.map((comment) => (
-              <div key={comment.id} className="border-b pb-2">
+              <div key={comment.id} className="border-b p-2 bg-contrast rounded-md">
                 <p className="text-sm font-medium">{comment.user}</p>
                 <p className="text-gray-600 dark:text-gray-300">{comment.content}</p>
               </div>
@@ -61,7 +61,7 @@ const CommentModal = ({ poemId, isOpen, onClose }: { poemId: string; isOpen: boo
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             className="w-full p-2 border rounded-md text-sm"
-            placeholder="Escreva seu comentário..."
+            placeholder="Comentários em desenvolvimento..."
           />
           <button
             onClick={handleSubmit}

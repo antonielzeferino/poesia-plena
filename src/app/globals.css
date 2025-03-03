@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #F5F5F5;
+  --background: #f5f5f5;
   --bg-contrast: #FFF;
   --foreground: #171717;
   --link: #29B6F6;
@@ -19,8 +19,6 @@
     --muted: #9a9a9a;
   }
 }
-
-
 
 body {
   color: var(--foreground);
