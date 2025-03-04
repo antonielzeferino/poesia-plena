@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const searchQuery = searchParams.get("search") || "";
   const sortOrder = searchParams.get("sort") || "recent";
   const page = parseInt(searchParams.get("page") || "1", 10);
-  const pageSize = 10;
+  const pageSize = parseInt(searchParams.get("limit") || "10", 10);
 
   try {
     const poems = await prisma.poem.findMany({
