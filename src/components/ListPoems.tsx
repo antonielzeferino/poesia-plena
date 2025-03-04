@@ -44,7 +44,7 @@ const ListPoems: React.FC = () => {
     return (
       <div className="space-y-4">
         <div className="h-8 bg-gray-500 rounded w-full mb-2 animate-pulse"></div>
-        {[...Array(3)].map((_, index) => (
+        {[...Array(7)].map((_, index) => (
           <div
             key={index}
             className="border-b p-4 bg-contrast rounded-md border-gray-500 dark:border-white/70 animate-pulse"
@@ -87,7 +87,7 @@ const ListPoems: React.FC = () => {
       {poems.length > 0 ? (
         <ul className="space-y-4">
           {poems.map((poem) => (
-            <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start border-gray-500 dark:border-white/70">
+            <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start border-gray-500 dark:border-white/70 shadow-md">
               <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
               {poem.author && (
                 <div className="flex justify-between">
