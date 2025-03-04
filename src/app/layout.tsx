@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import { Poem } from "@prisma/client";
 
 async function fetchPopularPoems() {
   try {
@@ -16,7 +17,7 @@ async function fetchPopularPoems() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const popularPoems = await fetchPopularPoems();
-  const poemTitles = popularPoems.map((poem: any) => poem.title).join(", ");
+  const poemTitles = popularPoems.map((poem: Poem) => poem.title).join(", ");
 
   return {
     title: "Poesia Plena - Plataforma de Poesia Livre",
