@@ -51,7 +51,6 @@ const CommentModal = ({ poemId, isOpen, onClose }: { poemId: string; isOpen: boo
         </button>
         <h2 className="text-lg font-semibold mb-4">Comentários</h2>
 
-        {/* Comentários roláveis */}
         <div className="flex-1 py-4 px-2 space-y-3 overflow-y-auto max-h-[calc(100vh-200px-80px)] ">
           {comments.length > 0 ? (
             comments.map((comment) => (
