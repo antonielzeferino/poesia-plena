@@ -14,7 +14,6 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      // Realizando a chamada à API para o cadastro
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -26,10 +25,9 @@ const Signup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Se o cadastro for bem-sucedido, redireciona para o login
+
         router.push("/auth/signin");
       } else {
-        // Caso haja erro, exibe a mensagem
         setError(data.message || "Erro ao criar conta. Tente novamente.");
       }
     } catch (err) {
@@ -44,10 +42,8 @@ const Signup = () => {
       <h2 className="font-bold text-3xl mb-6 text-foreground text-center">Crie sua Conta</h2>
 
       <div className="p-6 shadow-lg w-full max-w-sm min-h-[420px] bg-white rounded-tl-[5rem] rounded-br-[5rem] flex flex-col items-center">
-        {/* Título "Cadastrar" */}
         <h2 className="text-xl font-semibold text-center text-gray-800 sm:mt-4">Cadastro</h2>
 
-        {/* Formulário Responsivo */}
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4 px-4 flex-grow overflow-auto">
           <div className="flex flex-col">
             <label htmlFor="username" className="text-sm font-medium text-gray-700">
@@ -79,7 +75,6 @@ const Signup = () => {
             />
           </div>
 
-          {/* Botão de Cadastro */}
           <button
             type="submit"
             className="bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition w-full"
@@ -87,7 +82,6 @@ const Signup = () => {
             Cadastrar
           </button>
 
-          {/* Exibição de erro caso o cadastro falhe */}
           {error && <p className="text-red-500 text-center mt-2">{error}</p>}
         </form>
 
