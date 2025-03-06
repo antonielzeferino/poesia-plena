@@ -21,7 +21,7 @@ export async function GET(
         title: true,
         content: true,
         author: {
-          select: { username: true },
+          select: { username: true , id: true},
         },
       },
     });

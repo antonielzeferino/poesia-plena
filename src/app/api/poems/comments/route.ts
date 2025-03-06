@@ -19,7 +19,10 @@ export async function GET(req: NextRequest) {
          const comments = await prisma.comment.findMany({
             where: { poemId },
             include: {
-               user: { select: { username: true } },
+               user: { select: {
+                  username: true,
+                  id: true
+               } },
             },
             orderBy: { createdAt: "desc" },
          });
