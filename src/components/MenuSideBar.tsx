@@ -121,6 +121,16 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
     if (!response.ok) throw new Error("Erro ao salvar o like no banco de dados");
   };
 
+  const handleCopyLink = async () => {
+    try {
+      const url = window.location.href;
+      await navigator.clipboard.writeText(url);
+      alert("Link copiado para a área de transferência!");
+    } catch (error) {
+      console.error("Erro ao copiar link:", error);
+    }
+  };
+
   return (
     <>
       <CommentModal poemId={poemId} isOpen={isCommentModalOpen} onClose={() => setIsCommentModalOpen(false)} />
@@ -152,10 +162,10 @@ const MenuSidebar = ({ poemId }: { poemId: string }) => {
             <br />
             <SidebarItem
               icon={<Send />}
-              label="Enviar"
-              active={activeItems["Enviar"]}
-              toggleItem={() => handleAuthAction(() => { })}
-              color="bg-green-400"
+              label="Copiar Link"
+              active={false}
+              toggleItem={handleCopyLink}
+              color="bg-gray-400"
             />
             <SidebarItem
               icon={<MessageCircle />}
