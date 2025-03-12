@@ -28,7 +28,7 @@ const Header = () => {
           </button>
         </div>
 
-        <nav className={`flex justify-evenly gap-6 ${menuOpen ? "block" : "hidden"} mt-4 md:mt-0 w-full md:w-auto md:bg-transparent p-4 md:p-0 rounded-md md:rounded-none max-md:border-t-2 max-md:border-gray-500 `}>
+        <nav className={`flex justify-evenly gap-6 ${menuOpen ? "block" : "hidden"} mt-4 md:mt-0 w-full md:w-auto md:bg-transparent p-4 md:p-0 rounded-md md:rounded-none max-md:border-t-2 max-md:border-gray-500 md:flex`}>
           <Link href="/" className={`hover:text-white ${isActive('/')}`}>
             <House className="w-6 h-6" />
           </Link>
