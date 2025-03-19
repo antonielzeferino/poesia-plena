@@ -80,14 +80,14 @@ const CommentModal = ({
   if (!isOpen || !currentUser || !authorId) return null;
 
   return (
-    <div className="absolute top-0 z-20 bg-background left-0 flex items-center justify-center w-screen min-h-screen p-0">
+    <div className="sticky inset-0 z-50 top-0 bg-background left-0 flex items-center justify-center w-screen min-h-screen overflow-hidden p-0">
       <div className="bg-background p-6 shadow-lg w-full min-h-screen max-w-7xl flex flex-col">
         <button onClick={onClose} className="relative top-0 left-full -translate-x-8 p-2 bg-gray-700 rounded-md w-min">
           <X size={20} />
         </button>
         <h2 className="text-lg font-semibold mb-4">Comentários</h2>
 
-        <div className="flex-1 py-4 px-2 space-y-3 overflow-y-auto max-h-[calc(100vh-200px-80px)]">
+        <div className="flex-1 py-4 px-2 space-y-3 overflow-y-auto max-h-[calc(100vh-200px-80px)] ">
           {comments.length > 0 ? (
             comments.map((comment) => (
               <div

@@ -41,7 +41,7 @@ const Configuracoes = () => {
           <p className="text-red-500 font-semibold">{error}</p>
           <div className="flex justify-between mt-4">
             <Link href="/auth/signin">
-              <button className="bg-medium-blue text-white px-4 py-2 rounded-lg hover:bg-dark-blue">
+              <button className="bg-medium-blue text-foreground px-4 py-2 rounded-lg hover:bg-dark-blue">
                 Entrar
               </button>
             </Link>
