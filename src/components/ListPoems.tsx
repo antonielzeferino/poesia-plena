@@ -8,7 +8,7 @@ type Poem = {
   title: string;
   content: string;
   createdAt: Date;
-  author?: { username: string };
+  author?: { username: string , id: string};
 };
 
 const ListPoems: React.FC = () => {
@@ -91,7 +91,7 @@ const ListPoems: React.FC = () => {
               <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
               {poem.author && (
                 <div className="flex justify-between">
-                  <p className="text-sm text-muted">Por {poem.author.username}</p>
+                  <Link href={`/usuario/${poem.author.id}`} className="text-sm text-muted">Por: {poem.author.username}</Link>
                   <span className="text-md text-muted">
                     {new Date(poem.createdAt).toLocaleDateString('pt-BR', {
                       day: '2-digit',

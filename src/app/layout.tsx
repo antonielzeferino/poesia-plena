@@ -62,7 +62,7 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className="antialiased min-h-screen flex flex-col">
         <Header />
-        <main className="px-2 flex flex-col flex-grow pb-2">
+        <main className="px-2 flex flex-col flex-grow pb-4">
           {children}
         </main>
       </body>
