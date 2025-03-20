@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
           : { createdAt: "desc" },
           
       include: {
-        author: { select: { username: true } },
+        author: { select: { username: true , id: true,} },
         _count: { select: { likes: true } }, 
       },
       skip: (page - 1) * pageSize,
