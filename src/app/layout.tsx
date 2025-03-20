@@ -23,6 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Poesia Plena - Plataforma de Poesia Livre",
     description: `Leia os melhores poemas como "${poemTitles}". Descubra poesias livres, criativas e emocionantes na Poesia Plena.`,
     keywords: `poesia, poesia livre, poemas, plataforma de poesia, escritores, ${poemTitles}`,
+    icons: {
+      icon: "/images/favicon.ico",
+    },
     openGraph: {
       title: "Poesia Plena - Plataforma de Poesia Livre",
       description: `Leia os melhores poemas como "${poemTitles}". Descubra poesias livres, criativas e emocionantes na Poesia Plena.`,
@@ -30,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: "https://poesiaplena.com",
       images: [
         {
-          url: "https://poesiaplena.com/og-image.jpg",
+          url: "/images/logo.png",
           width: 1200,
           height: 630,
           alt: "Poesia Plena",
@@ -42,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
       site: "@poesiaplena",
       title: "Poesia Plena - Plataforma de Poesia Livre",
       description: `Leia os melhores poemas como "${poemTitles}". Descubra poesias livres, criativas e emocionantes na Poesia Plena.`,
-      images: ["https://poesiaplena.com/og-image.jpg"],
+      images: ["/images/logo.png"],
     },
     verification: {
       google: "teWyDbkkLKbIO8Rk7k0Q2H-nSE_0_MGJpzSmw8Kmjck",
