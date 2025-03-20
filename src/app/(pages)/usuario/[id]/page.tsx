@@ -2,7 +2,6 @@ import Loading from "@/app/Loading";
 import Image from "next/image";
 import UserPicture from "../../../../../public/images/userPic.png";
 import Link from "next/link";
-import { getSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Edit } from "lucide-react";
@@ -90,14 +89,19 @@ const UserPage = async ({ params }: { params: Promise<{ id: string }> }) => {
    const user = await getUser(id);
 
    const isUser: boolean = user?.id == session?.user.id
+   if (!user) {
+      return <Loading />;
+   }
+   const userCreatedAt = new Date(user.createdAt).toLocaleString("default", {
+      month: "2-digit",
+      year: "numeric",
+   });
 
    return (
       <div>
-         {!user ? (
-            <Loading />
-         ) : (
+         <div className="max-w-4xl mx-auto">
             <div className="w-full flex flex-wrap gap-4">
-               <div className="p-4 w-full bg-contrast rounded-md shadow-box-shadow flex gap-4 items-center">
+               <div className="p-2 md:p-4 w-full bg-contrast rounded-md shadow-box-shadow flex gap-4 items-center">
                   <Image
                      src={UserPicture}
                      alt="imagem do usuário"
@@ -105,11 +109,20 @@ const UserPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                      height={50}
                      className="rounded-full"
                   />
-                  <div className={`overflow-hidden ${isUser ? "flex gap-2" : "flex-col"} gap-1`}>
-                     <h3 className="line-clamp-1 text-sm font-bold">{user.username}</h3>
-                     {isUser ? <Link href="/poema/criar"><Edit/></Link> :
-                        <button className="bg-blue-500 text-white px-4 rounded-md hover:bg-blue-600 transition-colors">Seguir</button>
-                     }
+                  <div className={`overflow-hidden`}>
+                     <div className={`${isUser ? "flex gap-2" : "flex-col gap-2"}`}>
+                        <h3 className="line-clamp-1 text-sm font-bold">{user.username}</h3>
+                        {isUser ? (
+                           <Link href="/poema/criar">
+                              <Edit />
+                           </Link>
+                        ) : (
+                           <button className="bg-blue-500 text-white px-4 rounded-md hover:bg-blue-600 transition-colors">
+                              Seguir
+                           </button>
+                        )}
+                     </div>
+                     <p className="text-sm font-thin text-muted">por aqui desde: {userCreatedAt}</p>
                   </div>
                </div>
                <div className="p-4 w-full bg-contrast rounded-md shadow-box-shadow flex flex-col gap-1">
@@ -135,7 +148,7 @@ const UserPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                   </Link>
                </div>
             </div>
-         )}
+         </div>
       </div>
    );
 };
