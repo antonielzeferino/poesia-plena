@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import { Poem } from "@prisma/client";
+import Link from "next/link";
 
 async function fetchPopularPoems() {
   try {
@@ -62,6 +63,9 @@ export default function RootLayout({
         <main className="px-2 flex flex-col flex-grow pb-4">
           {children}
         </main>
+        <footer className="bg-gray-800 text-white p-4 pb-8 text-center">
+          <p>Desenvolvido por <Link href="https://antonielzeferino.vercel.app" target="_blank" className="text-blue-600 hover:underline">Antoniel Zeferino</Link></p>
+        </footer>
       </body>
     </html>
   );
