@@ -61,9 +61,6 @@ export async function DELETE(
     const poem = await prisma.poem.delete({
       where: { id },
       include: {
-        author: {
-          select: { username: true },
-        },
         likes: true,
         comments: true,
         savedBy: true,
