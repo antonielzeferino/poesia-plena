@@ -2,12 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import UserInfo from "@/app/(pages)/configuracoes/UserInfo";
 import DeleteBtn from "@/components/DeleteBtn";
 import Loading from "@/app/Loading";
 
-type Poem = { id: string; title: string };
-type User = { id: string; username: string; poems: Poem[] };
+type Poem = { id: string; title: string; content?: string };
+type User = { 
+  id: string;
+  username: string;
+  name?: string;
+  poems: Poem[];
+  following: { id: string }[];
+  followers: { id: string }[];
+};
 
 const Configuracoes = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -20,7 +26,7 @@ const Configuracoes = () => {
         const res = await fetch("/api/user/config");
         if (!res.ok) throw new Error("Erro ao buscar usuário");
 
-        const data = await res.json();
+        const data: User = await res.json();
         setUser(data);
       } catch (err) {
         setError("Você precisa estar logado para acessar as configurações.");
@@ -32,7 +38,7 @@ const Configuracoes = () => {
     fetchUserData();
   }, []);
 
-  if (loading) return <Loading />
+  if (loading) return <Loading />;
   if (error) {
     return (
       <div className="px-4 w-full flex flex-col flex-grow items-center">
@@ -58,8 +64,18 @@ const Configuracoes = () => {
 
   return (
     <div className="w-full text-foreground mt-2 max-w-4xl mx-auto">
-      <UserInfo />
-
+      <div className="flex flex-wrap items-center gap-4">
+        <div>
+          <p className="text-foreground">{user?.username || "Não disponível"}</p>
+          {user?.name && <p className="text-foreground text-[12px] opacity-50">{user.name}</p>}
+        </div>
+        <div className="flex gap-4">
+          <p className="text-foreground">posts: <span>{user?.poems.length}</span></p>
+          <p className="text-foreground">seguindo: <span>{user?.following.length}</span></p>
+          <p className="text-foreground">seguidores: <span>{user?.followers.length}</span></p>
+        </div>
+      </div>
+      
       {user && user?.poems.length > 0 && (
         <div className="mt-6 w-full">
           <h2 className="text-md font-semibold">Seus Poemas</h2>
@@ -74,6 +90,7 @@ const Configuracoes = () => {
                     {poem.title}
                   </h3>
                 </Link>
+                <DeleteBtn id={poem.id} />
               </li>
             ))}
           </ul>
