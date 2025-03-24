@@ -5,10 +5,13 @@ import { Trash } from "lucide-react";
 const DeleteBtn = ({ id }: {id: string}) => {
   const handleDelete = async () => {
     try {
-      await fetch(`/api/poems/${id}`, {
+      const res = await fetch(`/api/poems/${id}`, {
         method: "DELETE",
+        headers: { "Content-Type": "application/json" },
       });
-      alert("postagem excluída com sucesso!");
+      if (res) {
+        console.log("postagem excluída com sucesso!", res);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -17,9 +20,9 @@ const DeleteBtn = ({ id }: {id: string}) => {
   return (
     <button
       onClick={handleDelete}
-      className="mt-3 bg-red-500 text-white flex items-center gap-2 px-3 py-1 rounded-md text-sm hover:bg-red-600 transition"
+      className="bg-red-500/70 text-white flex items-center gap-2 px-3 py-1 rounded-md text-sm hover:bg-red-600 transition"
     >
-      <Trash size={16} /> Excluir
+      <Trash size={16} />
     </button>
   );
 }
