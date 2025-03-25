@@ -44,7 +44,7 @@ async function PoemPage({ params }: { params: Promise<{ id: string }> }) {
       <main className="w-full md:px-6 pb-4">
         <h1 className="text-2xl text-foreground mb-4 font-light font-mono text-center">{poem.title}</h1>
         <p className="text-foreground whitespace-pre-wrap max-w-max">{poem.content}</p>
-        <div className="mt-4 ">
+        <div className="mt-4 text-end">
           <Link href={`/usuario/${id}`} className="text-sm text-muted mb-2">~ {poem.author.username}</Link>
         </div>
       </main>
