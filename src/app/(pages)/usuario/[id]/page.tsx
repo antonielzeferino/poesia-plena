@@ -1,64 +1,11 @@
-import Loading from "@/app/Loading";
 import Image from "next/image";
 import UserPicture from "../../../../../public/images/userPic.png";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Edit } from "lucide-react";
-
-export type Poem = {
-   id: string;
-   title: string;
-   content: string;
-   authorId: string;
-   createdAt: string;
-};
-
-export type Like = {
-   id: string;
-   userId: string;
-   poemId: string;
-   createdAt: string;
-};
-
-export type Comment = {
-   id: string;
-   userId: string;
-   poemId: string;
-   content: string;
-   createdAt: string;
-};
-
-export type Follower = {
-   id: string;
-   userId: string;
-   followerId: string;
-   createdAt: string;
-};
-
-export type SavedPoem = {
-   id: string;
-   userId: string;
-   poemId: string;
-   createdAt: string;
-};
-
-export type User = {
-   id: string;
-   username: string;
-   name: string;
-   bio: string
-   password: string;
-   createdAt: string;
-   isActive: boolean;
-   poems: Poem[];
-   comments: Comment[];
-   followers: Follower[];
-   following: Follower[];
-   likes: Like[];
-   savedPoems: SavedPoem[];
-};
-
+import FollowBtn from "@/components/FollowBtn";
+import { User } from "@/types";
 
 const getUser = async (id: string) => {
    try {
@@ -90,7 +37,11 @@ const UserPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
    const isUser: boolean = user?.id == session?.user.id
    if (!user) {
-      return <Loading />;
+      return (
+         <div className="flex justify-center items-center h-screen">
+            <p className="text-xl font-bold">Usuário não encontrado</p>
+         </div>
+      );
    }
    const userCreatedAt = new Date(user.createdAt).toLocaleString("default", {
       month: "2-digit",
@@ -113,37 +64,35 @@ const UserPage = async ({ params }: { params: Promise<{ id: string }> }) => {
                      <div className={`${isUser ? "flex gap-2" : "flex-col gap-2"}`}>
                         <h3 className="line-clamp-1 text-sm font-bold">{user.username}</h3>
                         {isUser ? (
-                           <Link href="/poema/criar">
-                              <Edit />
+                           <Link href={`/usuario/${id}/editar`}>
+                             <Edit />
                            </Link>
                         ) : (
-                           <button className="bg-blue-500 text-white px-4 rounded-md hover:bg-blue-600 transition-colors">
-                              Seguir
-                           </button>
+                           <FollowBtn userId={user.id} />
                         )}
                      </div>
-                     <p className="text-sm font-thin text-muted">por aqui desde: {userCreatedAt}</p>
+                     <p className="text-sm text-muted">por aqui desde: {userCreatedAt}</p>
                   </div>
                </div>
                <div className="p-4 w-full bg-contrast rounded-md shadow-box-shadow flex flex-col gap-1">
                   <h3 className="text-sm font-bold">Biografia</h3>
-                  <p className="text-sm font-thin">{user.bio}</p>
+                  <p className="text-sm font-normal">{user.bio}</p>
                </div>
                <div className="p-4 w-full bg-contrast rounded-md shadow-box-shadow flex flex-col gap-4">
                   <div className="flex gap-2 max-w-[300px]">
                      <div className="flex gap-1 me-8">
                         <h3 className="text-sm font-bold">Seguidores:</h3>
-                        <p className="text-sm font-thin">{user.followers.length}</p>
+                        <p className="text-sm font-normal">{user.followers.length}</p>
                      </div>
                      <div className="flex gap-1">
                         <h3 className="text-sm font-bold">Seguindo:</h3>
-                        <p className="text-sm font-thin">{user.following.length}</p>
+                        <p className="text-sm font-normal">{user.following.length}</p>
                      </div>
                   </div>
                   <Link href={`/usuario/${id}/poemas`}>
                      <div className="flex gap-2">
                         <h3 className="text-sm font-bold">Poemas</h3>
-                        <p className="text-sm font-thin">{user.poems.length}</p>
+                        <p className="text-sm font-normal">{user.poems.length}</p>
                      </div>
                   </Link>
                </div>

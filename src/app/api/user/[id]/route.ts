@@ -5,11 +5,10 @@ export async function GET(
    request: NextRequest,
    { params }: { params: Promise<{ id: string }> }
 ) {
-   const { id } = await params;
+   const { id } = await params
 
    if (!id) {
-      return NextResponse.json({ error: "User ID not provided" }, { status
-: 400 });
+      return NextResponse.json({ error: "User ID not provided" }, { status: 400 });
    }
 
    try {
@@ -18,13 +17,12 @@ export async function GET(
          include: {
             poems: true,
             comments: true,
-            followers: true,
+            followers: { select: { id: true } },
             following: true,
             likes: true,
             savedPoems: true
          }
       });
-      
 
       if (!user) {
          return NextResponse.json({ error: "User not found" }, { status: 404 });
