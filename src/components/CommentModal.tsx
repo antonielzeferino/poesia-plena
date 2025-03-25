@@ -29,7 +29,6 @@ const CommentModal = ({
         if (!userRes.ok || !poemRes.ok || !commentsRes.ok) throw new Error("Erro ao buscar dados");
 
         const [userData, poemData, commentsData] = await Promise.all([userRes.json(), poemRes.json(), commentsRes.json()]);
-        console.log(userData, poemData, commentsData);
         setAuthorId(poemData.author.id);
         setCurrentUser({ id: userData.id, isOwner: userData.id === poemData.author.id });
         setComments(commentsData.comments);
