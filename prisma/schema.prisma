@@ -29,8 +29,8 @@ model Poem {
   content    String
   authorId   String
   createdAt  DateTime       @default(now())
-  comments   Comment[]
-  likes      Like[]
+  comments   Comment[] 
+  likes      Like[]    
   author     User           @relation(fields: [authorId], references: [id])
   savedBy    SavedPoem[]
   categories PoemCategory[] @relation("PoemToPoemCategory")
