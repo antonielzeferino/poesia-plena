@@ -14,7 +14,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-gray-800 text-gray-400 sticky top-0 w-full mb-2 rounded-b-2xl">
+    <header className="bg-gray-800 text-gray-400 sticky top-0 w-full mb-2 rounded-b-2xl z-10">
       <div className=" p-4 flex flex-col md:flex-row md:justify-between md:items-center mx-auto  max-w-4xl">
         <div className="flex justify-between items-center w-full md:w-auto">
           <Link href="/">

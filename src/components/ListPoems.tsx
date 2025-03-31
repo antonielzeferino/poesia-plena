@@ -8,7 +8,11 @@ type Poem = {
   title: string;
   content: string;
   createdAt: Date;
-  author?: { username: string , id: string};
+  author?: {
+    username: string,
+    id: string,
+    name: string
+  };
 };
 
 const ListPoems: React.FC = () => {
@@ -42,7 +46,7 @@ const ListPoems: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 z-0">
         <div className="h-8 bg-gray-500 rounded w-full mb-2 animate-pulse"></div>
         {[...Array(7)].map((_, index) => (
           <div
@@ -91,7 +95,7 @@ const ListPoems: React.FC = () => {
               <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
               {poem.author && (
                 <div className="flex justify-between">
-                  <Link href={`/usuario/${poem.author.id}`} className="text-sm text-muted">Por: {poem.author.username}</Link>
+                  <Link href={`/usuario/${poem.author.id}`} className="text-sm text-muted">Por: {poem.author.name ? poem.author.name : poem.author.username}</Link>
                   <span className="text-md text-muted">
                     {new Date(poem.createdAt).toLocaleDateString('pt-BR', {
                       day: '2-digit',
@@ -115,7 +119,7 @@ const ListPoems: React.FC = () => {
         <p className="text-muted">Nenhum poema encontrado.</p>
       )}
 
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex justify-between items-center mt-6 max-w-max gap-6 mx-auto">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
