@@ -8,7 +8,7 @@ const userPoems = async ({ params }: { params: Promise<{ id: string }> }) => {
    const poems = user?.poems
 
    return (
-      <div className="flex flex-col flex-grow items-center gap-4">
+      <div className="flex flex-col flex-grow items-center gap-4 max-w-4xl w-full mx-auto">
          {poems && poems.length > 0 ? (
             poems.map((poem) => (
                <div key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start border-muted  shadow-md shadow-foreground/5 w-full">
