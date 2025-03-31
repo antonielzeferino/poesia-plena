@@ -46,7 +46,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> } 
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
 
@@ -58,20 +58,28 @@ export async function DELETE(
       );
     }
 
+    await prisma.like.deleteMany({
+      where: { poemId: id },
+    });
+    await prisma.comment.deleteMany({
+      where: { poemId: id },
+    });
+    await prisma.savedPoem.deleteMany({
+      where: { poemId: id },
+    });
+
+    // Deletar o poema
     const poem = await prisma.poem.delete({
       where: { id },
-      include: {
-        likes: true,
-        comments: true,
-        savedBy: true,
-      },
     });
 
     return NextResponse.json(poem, { status: 200 });
   } catch (error) {
+    console.error("Erro ao deletar o poema:", error);
     return NextResponse.json(
       { message: "Erro ao deletar o poema", error },
       { status: 500 }
     );
   }
 }
+
