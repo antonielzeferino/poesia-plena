@@ -1,35 +1,11 @@
-import { User } from "@/types";
 import Link from "next/link";
-
-const getUser = async (id: string) => {
-   try {
-      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${id}`, {
-         cache: "no-store",
-         method: "GET",
-         headers: {
-            "Content-Type": "application/json",
-         },
-      });
-
-      if (!res.ok) {
-         throw new Error("Erro ao buscar usuário");
-      }
-
-      const data: User = await res.json();
-      if (!data) {
-         throw new Error("Dados não encontrados");
-      }
-      return data.poems;
-   } catch (err) {
-      console.error("Erro na requisição:", err);
-      return null;
-   }
-};
+import { getUser } from "../page";
 
 const userPoems = async ({ params }: { params: Promise<{ id: string }> }) => {
    const { id } = await params;
 
-   const poems = await getUser(id);
+   const user = await getUser(id);
+   const poems = user?.poems
 
    return (
       <div className="flex flex-col flex-grow items-center gap-4">
