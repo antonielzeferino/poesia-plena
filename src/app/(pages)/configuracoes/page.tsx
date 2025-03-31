@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import DeleteBtn from "@/components/DeleteBtn";
 import Loading from "@/app/Loading";
+import { User, UserPen, UserX } from "lucide-react";
 
 type Poem = { id: string; title: string; content?: string };
-type User = { 
+type User = {
   id: string;
   username: string;
   name?: string;
@@ -75,7 +76,7 @@ const Configuracoes = () => {
           <p className="text-foreground">seguidores: <span>{user?.followers.length}</span></p>
         </div>
       </div>
-      
+
       {user && user?.poems.length > 0 && (
         <div className="mt-6 w-full">
           <h2 className="text-md font-semibold">Seus Poemas</h2>
@@ -97,10 +98,13 @@ const Configuracoes = () => {
         </div>
       )}
 
-      <div className="flex justify-between mt-6">
+      <div className="flex gap-2 mt-6 items-center">
+        <Link href={`/usuario/${user?.id}/editar`} className="flex gap-2 bg-link px-4 py-2 rounded-lg text-black">
+          <UserPen /> editar
+        </Link>
         <Link href="/api/auth/signout">
-          <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
-            Logout
+          <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 flex gap-2">
+            <UserX /> sair
           </button>
         </Link>
       </div>
