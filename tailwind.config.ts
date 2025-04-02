@@ -15,6 +15,7 @@ export default {
         muted: 'var(--muted)',
         contrast: 'var(--bg-contrast)'
       },
+
     },
   },
   darkMode: 'media',

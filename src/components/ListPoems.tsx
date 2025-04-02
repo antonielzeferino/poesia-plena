@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { Pinyon_Script } from "next/font/google";
+
+const cursive = Pinyon_Script({ subsets: ["latin"], weight: "400" });
 
 type Poem = {
   id: string;
@@ -92,7 +95,7 @@ const ListPoems: React.FC = () => {
         <ul className="space-y-4">
           {poems.map((poem) => (
             <li key={poem.id} className="border-b p-4 bg-contrast rounded-md text-start border-gray-500 dark:border-white/70 shadow-md">
-              <h2 className="text-lg font-semibold text-foreground">{poem.title}</h2>
+              <h2 className={"first-letter:uppercase text-xl font-medium text-foreground line-clamp-1 " + cursive.className}>{poem.title}</h2>
               {poem.author && (
                 <div className="flex justify-between">
                   <Link href={`/usuario/${poem.author.id}`} className="text-sm text-muted">Por: {poem.author.name ? poem.author.name : poem.author.username}</Link>
