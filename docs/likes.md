@@ -76,3 +76,5 @@ Esta rota permite que os usuários curtam e descurtam poemas na plataforma.
 - Cada usuário pode curtir ou descurtir um poema apenas uma vez.  
 - O `GET` pode ser usado por usuários não autenticados, mas o `POST` exige login.  
 - O sistema previne duplicação de curtidas ao garantir que cada usuário só pode ter um like por poema.  
+
+  - [Início](../README.md)  

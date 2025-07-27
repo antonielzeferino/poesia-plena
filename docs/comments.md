@@ -92,3 +92,5 @@
 - O **GET** só funciona se o `poemId` for passado como parâmetro de consulta.  
 - O **POST** exige que o usuário esteja autenticado via **NextAuth** e forneça tanto o `poemId` quanto o conteúdo do comentário.  
 - Os comentários são sempre retornados na ordem mais recente (por data de criação).
+
+  - [Início](../README.md)  

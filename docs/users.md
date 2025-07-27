@@ -69,3 +69,5 @@ Esta rota retorna informações detalhadas do usuário autenticado.
 - **401 Unauthorized** – Usuário não autenticado.  
 - **404 Not Found** – Usuário não encontrado.  
 - **500 Internal Server Error** – Erro ao buscar usuário.  
+
+  - [Início](../README.md)  
